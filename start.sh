@@ -24,9 +24,20 @@ guard_root(){
 	fi
 
 }
+find_os(){
+	local os="/etc/os-release"
+	if [[ -f ${os} ]]; then
+		NAME=$(awk -F'[="]+' '/^NAME=/ {print $2}' ${os})
+		VER=$(awk -F'[="]+' '/^VERSION_ID=/ {print $2}' ${os})
+		printf "\e[34m$NAME $VER\n"
+	elif [[ $? = "1" ]]; then 
+		echo "find_empty?"
+
+	fi
+}
 ##########################
 #   Call all function
 ##########################
-main(){ guard_root
+main(){ guard_root; find_os
 }
 main
