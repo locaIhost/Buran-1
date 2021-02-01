@@ -20,7 +20,7 @@ TOOR=`awk '{print $0}' banner/toor`
 guard_root(){
 	if [[ ${UID} = "0" ]]; then clear
 	elif [[ ${UID} != "0" ]]; then clear;
-		printf "\e[5;31m ${GUARD}$USERNAME\n${TOOR}\n\e[0m"; exit 1
+		printf "\e[5;31m ${GUARD}$USER\n${TOOR}\n\e[0m"; exit 1
 	fi
 
 }
@@ -34,8 +34,8 @@ find_os(){
 		VER=$(awk -F'[="]+' '/^VERSION_ID=/ {print $2}' ${os})
 		printf "\e[34m$NAME $VER\n"
 	elif [[ $? = "1" ]]; then 
-		echo "find_empty?"
-
+		find_vendor
+	
 	fi
 }
 ##########################
@@ -47,6 +47,10 @@ find_vendor(){
 	local oracle="/etc/oracle-release"
 	if [[ -f ${redhat} ]]; then
 		FULL=$(awk '{print $1,$2,$6}' ${redhat})
+		printf "\e[31m\fYOUR OS: $FULL\n ${1}"
+		echo ${FULL} > local_os
+	elif [[ -f ${oracle} ]]; then
+		FULL=$(awk '{print $1,$5}' ${oracle})
 		printf "\e[31m\fYOUR OS: $FULL\n ${1}"
 		echo ${FULL} > local_os
 	fi
