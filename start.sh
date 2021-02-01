@@ -24,6 +24,9 @@ guard_root(){
 	fi
 
 }
+##########################
+#    Find OS
+##########################
 find_os(){
 	local os="/etc/os-release"
 	if [[ -f ${os} ]]; then
@@ -33,6 +36,19 @@ find_os(){
 	elif [[ $? = "1" ]]; then 
 		echo "find_empty?"
 
+	fi
+}
+##########################
+#   Find vendor
+##########################
+find_vendor(){
+#Linux	
+	local redhat="/etc/redhat-release"
+	local oracle="/etc/oracle-release"
+	if [[ -f ${redhat} ]]; then
+		FULL=$(awk '{print $1,$2,$6}' ${redhat})
+		printf "\e[31m\fYOUR OS: $FULL\n ${1}"
+		echo ${FULL} > local_os
 	fi
 }
 ##########################
